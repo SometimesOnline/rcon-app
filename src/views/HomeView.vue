@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import router from "@/router";
 
 const selectedGameTab = ref("");
+
+const onClickLoginBtn = () => {
+  router.push("remoteConsole");
+};
 </script>
 
 <template>
@@ -19,7 +24,7 @@ const selectedGameTab = ref("");
     <div class="ma-5">
       <v-text-field label="address" variant="solo"></v-text-field>
       <v-text-field label="password" type="password" variant="solo"></v-text-field>
-      <v-btn size="large" width="100%">Log In</v-btn>
+      <v-btn size="large" width="100%" @click="onClickLoginBtn">Log In</v-btn>
     </div>
   </v-card>
 </template>
