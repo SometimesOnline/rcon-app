@@ -32,7 +32,7 @@ onMounted(() => {
       ref="consoleScroll"
       class="flex-column-reverse d-flex">
       <template v-slot:default="{ item }">
-        <div>{{ item }}</div>
+        <div class="px-1">{{ item }}</div>
       </template>
     </v-virtual-scroll>
     <v-text-field
