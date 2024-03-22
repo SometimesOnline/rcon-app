@@ -20,6 +20,10 @@ export const useWebsocket = defineStore("websocket", () => {
     requestRcon(`${process.env.VUE_APP_RCON_API_WS_PALWORLD}/connect`, connectInfo, responseCallback);
   }
 
+  function executeCommand(command: string, responseCallback: (message: IMessage) => void) {
+    requestRcon(`${process.env.VUE_APP_RCON_API_WS_PALWORLD}/command`, { command: command }, responseCallback);
+  }
+
   function requestRcon(destination: string, request: object, responseCallback: (message: IMessage) => void) {
     rcon.value?.publish({ destination: destination, body: JSON.stringify(request) });
     const subscribedResponse = rcon.value?.subscribe(
@@ -31,6 +35,5 @@ export const useWebsocket = defineStore("websocket", () => {
     );
     return;
   }
-
   return { rcon, connectRcon, requestRcon };
 });
