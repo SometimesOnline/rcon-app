@@ -1,11 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import router from "@/router";
+import { useWebsocket } from "@/stores/websocket";
+import { Client, type IMessage } from "@stomp/stompjs";
 
 const selectedGameTab = ref("");
+const websocket = useWebsocket();
+
+const hostIp = ref("");
+const port = ref<number>(0);
+const password = ref("");
+
+const rconLoginInfo = computed(() => {
+  return {
+    host: hostIp.value,
+    port: port.value,
+    password: password.value
+  };
+});
 
 const onClickLoginBtn = () => {
-  router.push("remoteConsole");
+  websocket.rcon = new Client({
+    brokerURL: `${process.env.VUE_APP_RCON_API_WS_ENDPOINT_URL}`
+  });
+  websocket.connectRcon(rconLoginInfo.value, (message: IMessage) => {
+    console.log(message.body);
+    router.push("remoteConsole");
+  });
 };
 </script>
 
