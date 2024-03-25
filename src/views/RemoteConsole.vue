@@ -1,24 +1,39 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import type { VVirtualScroll } from "vuetify/components";
+import { useWebsocket } from "@/stores/websocket";
+import router from "@/router";
 
 const consoleLines = reactive([""]);
 const commandInput = ref("");
+
+const websocket = useWebsocket();
 
 const consoleScroll = ref<VVirtualScroll | null>(null);
 const onPressEnterWithCommand = () => {
   if (commandInput.value !== "" && commandInput.value) {
     consoleLines.push(commandInput.value);
+    websocket
+      .executeCommand(commandInput.value)
+      .then(response => {
+        console.log(response);
+        consoleLines.push(response.body);
+      })
+      .catch(error => console.error(error));
     commandInput.value = "";
   }
 };
 
 // test
 onMounted(() => {
-  consoleLines.length = 0;
-  for (let i = 0; i < 200; i++) {
-    consoleLines.push("line" + i);
+  if (!websocket.rcon?.connected) {
+    router.replace({ name: "home" });
   }
+  consoleLines.push(`connected to ${websocket.selectedGameType} server`);
+});
+
+onBeforeUnmount(() => {
+  websocket.disconnectRcon();
 });
 </script>
 
