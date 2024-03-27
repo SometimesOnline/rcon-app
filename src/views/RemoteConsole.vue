@@ -14,7 +14,7 @@ const onPressEnterWithCommand = () => {
   if (commandInput.value !== "" && commandInput.value) {
     consoleLines.push(commandInput.value);
     websocket
-      .executeCommand(commandInput.value)
+      .executeCommandRcon(commandInput.value)
       .then(response => {
         console.log(response);
         consoleLines.push(response.body);
@@ -24,10 +24,11 @@ const onPressEnterWithCommand = () => {
   }
 };
 
-// test
 onMounted(() => {
   if (!websocket.rcon?.connected) {
-    router.replace({ name: "home" });
+    alert("서버와의 연결이 끊어졌습니다. 연결 페이지로 이동합니다.");
+    router.replace({ name: "home" }); // history 에 추가되지 않음.(뒤로가기 불가)
+    return;
   }
   consoleLines.push(`connected to ${websocket.selectedGameType} server`);
 });

@@ -35,7 +35,7 @@ export const useWebsocket = defineStore("websocket", () => {
     return requestRcon(`${GAME_TYPE_URI[selectedGameType.value]}/disconnect`, {}).then(() => rcon.value?.deactivate());
   }
 
-  function executeCommand(command: string) {
+  function executeCommandRcon(command: string) {
     return requestRcon(`${GAME_TYPE_URI[selectedGameType.value]}/command`, { command });
   }
 
@@ -57,5 +57,5 @@ export const useWebsocket = defineStore("websocket", () => {
       );
     });
   }
-  return { rcon, selectedGameType, requestRcon, executeCommand, connectRcon, disconnectRcon };
+  return { rcon, selectedGameType, requestRcon, executeCommandRcon, connectRcon, disconnectRcon };
 });
